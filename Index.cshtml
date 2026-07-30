@@ -1,0 +1,133 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HaulSync – Smart Fleet Coordination</title>
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <section class="hero">
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fa-solid fa-truck-fast"></i>
+                <span>HaulSync</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#" id="aboutLink">About</a></li>
+                <li><a href="#" id="servicesLink">Services</a></li>
+                <li><a href="#" id="contactLink">Contact</a></li>
+                <li><a href="/Auth/Login" class="btn-login-nav">Login</a></li>
+            </ul>
+        </nav>
+        <div class="hero-content">
+            <p class="tagline">A Logistic</p>
+            <h1><span>Elevating the</span><span>world of</span><span>Logistics.</span></h1>
+            <p class="sub-headline">We set the gold standard in transporting goods from A to B.</p>
+        </div>
+    </section>
+
+    <!-- About Modal -->
+    <div class="auth-overlay" id="aboutOverlay">
+        <div class="auth-modal" style="max-width:600px;">
+            <button class="close-modal" id="closeAboutBtn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="auth-logo"><i class="fa-solid fa-truck-fast"></i><div><h2>About HaulSync</h2></div></div>
+            <div style="padding:10px 0;line-height:1.8;">
+                <p><strong>HaulSync</strong> is a comprehensive fleet management platform designed to optimise logistics operations.</p>
+                <p>It connects dispatchers, managers, and drivers in one unified system, enabling real‑time visibility, efficient trip planning, and seamless communication.</p>
+                <p>From route optimisation to proof of delivery, HaulSync streamlines every step of the supply chain.</p>
+            </div>
+            <button class="btn-submit" onclick="document.getElementById('aboutOverlay').classList.remove('active');document.body.style.overflow='';">Close</button>
+        </div>
+    </div>
+
+    <!-- Services Modal -->
+    <div class="auth-overlay" id="servicesOverlay">
+        <div class="auth-modal" style="max-width:600px;">
+            <button class="close-modal" id="closeServicesBtn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="auth-logo"><i class="fa-solid fa-cogs"></i><div><h2>Our Services</h2></div></div>
+            <div style="padding:10px 0;line-height:2;">
+                <p><i class="fa-solid fa-check-circle" style="color:#29b34a;"></i> <strong>Fleet Management</strong> – Real‑time vehicle tracking and maintenance.</p>
+                <p><i class="fa-solid fa-check-circle" style="color:#29b34a;"></i> <strong>Trip Planning & Dispatch</strong> – Create, assign, and monitor trips.</p>
+                <p><i class="fa-solid fa-check-circle" style="color:#29b34a;"></i> <strong>Proof of Delivery</strong> – Capture signatures, photos, and notes.</p>
+                <p><i class="fa-solid fa-check-circle" style="color:#29b34a;"></i> <strong>Driver Management</strong> – Performance tracking, availability, and communication.</p>
+                <p><i class="fa-solid fa-check-circle" style="color:#29b34a;"></i> <strong>Analytics & Reporting</strong> – Exception summaries and performance insights.</p>
+            </div>
+            <button class="btn-submit" onclick="document.getElementById('servicesOverlay').classList.remove('active');document.body.style.overflow='';">Close</button>
+        </div>
+    </div>
+
+    <!-- Contact Modal -->
+    <div class="auth-overlay" id="contactOverlay">
+        <div class="auth-modal" style="max-width:600px;">
+            <button class="close-modal" id="closeContactBtn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="auth-logo"><i class="fa-solid fa-phone"></i><div><h2>Contact Us</h2></div></div>
+            <div style="padding:10px 0;line-height:2.2;">
+                <p><i class="fa-solid fa-envelope"></i> <strong>Email:</strong> support@haulsync.com</p>
+                <p><i class="fa-solid fa-phone"></i> <strong>Phone:</strong> +1 449 143 007</p>
+                <p><i class="fa-solid fa-location-dot"></i> <strong>Address:</strong> 123 Logistics Ave, Kempton Park, Johannesburg</p>
+                <p><i class="fa-solid fa-clock"></i> <strong>Hours:</strong> 24/7 – Always here for you.</p>
+            </div>
+            <button class="btn-submit" onclick="document.getElementById('contactOverlay').classList.remove('active');document.body.style.overflow='';">Close</button>
+        </div>
+    </div>
+
+    <script>
+        // About modal
+        document.getElementById('aboutLink')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('aboutOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        document.getElementById('closeAboutBtn')?.addEventListener('click', function() {
+            document.getElementById('aboutOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        document.getElementById('aboutOverlay')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Services modal
+        document.getElementById('servicesLink')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('servicesOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        document.getElementById('closeServicesBtn')?.addEventListener('click', function() {
+            document.getElementById('servicesOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        document.getElementById('servicesOverlay')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Contact modal
+        document.getElementById('contactLink')?.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('contactOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+        document.getElementById('closeContactBtn')?.addEventListener('click', function() {
+            document.getElementById('contactOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        document.getElementById('contactOverlay')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    </script>
+</body>
+</html>
