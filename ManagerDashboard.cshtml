@@ -1,0 +1,455 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manager Dashboard – HaulSync</title>
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+   
+    <header class="topbar">
+        <div class="logo">
+            <i class="fa-solid fa-truck-fast"></i>
+            <div>
+                <h1>HaulSync</h1>
+                <p>Smart Fleet Coordination Platform</p>
+            </div>
+        </div>
+        <div class="top-icons">
+            <i class="fa-solid fa-bell" title="Notifications"></i>
+            <i class="fa-solid fa-message" title="Messages"></i>
+            <div class="avatar-wrapper">
+                <img src="https://i.pravatar.cc/50?img=12" alt="Profile" class="avatar" />
+                <div class="dropdown-menu">
+                    <div class="dropdown-header">
+                        <img src="https://i.pravatar.cc/50?img=12" alt="Profile" />
+                        <div><strong id="dropdownNameMgr">Jane Smith</strong><span id="dropdownRoleMgr">Manager</span></div>
+                    </div>
+                    <ul>
+                        <li id="profileMenuItemMgr"><i class="fa-regular fa-user"></i> My Profile</li>
+                        <li id="logoutMenuItemMgr"><i class="fa-solid fa-right-from-bracket"></i> Logout</li>
+                    </ul>
+                </div>
+            </div>
+            <button class="btn-logout" id="logoutBtn2"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <aside class="sidebar">
+            <ul>
+                <li class="active" data-section="mgr-dashboard"><i class="fa-solid fa-chart-line"></i> Dashboard</li>
+                <li data-section="mgr-exceptions"><i class="fa-solid fa-flag"></i> Exceptions</li>
+                <li data-section="mgr-drivers"><i class="fa-solid fa-user-tie"></i> Drivers</li>
+                <li data-section="mgr-analytics"><i class="fa-solid fa-chart-pie"></i> Analytics</li>
+                <li data-section="mgr-maintenance"><i class="fa-solid fa-wrench"></i> Maintenance</li>
+                <li data-section="mgr-disputes"><i class="fa-solid fa-scale-balanced"></i> Disputes</li>
+                <li data-section="mgr-users"><i class="fa-solid fa-users"></i> Manage Users</li>
+            </ul>
+        </aside>
+
+        <section class="dashboard-content">
+            <!-- Manager Dashboard -->
+            <div id="section-mgr-dashboard" class="section active">
+                <div class="dashboard-header"><h2>Manager Dashboard</h2><p>Fleet performance overview</p></div>
+                <div class="stats-grid">
+                    <div class="stat-card"><i class="fa-solid fa-percent"></i><div><h4>On-Time Delivery</h4><p id="mgrOnTime">94%</p></div></div>
+                    <div class="stat-card"><i class="fa-solid fa-gas-pump"></i><div><h4>Avg Fuel</h4><p>8.2 L/100km</p></div></div>
+                    <div class="stat-card"><i class="fa-solid fa-star"></i><div><h4>Driver Rating</h4><p id="mgrAvgRating">4.6 ★</p></div></div>
+                    <div class="stat-card"><i class="fa-solid fa-flag"></i><div><h4>Open Exceptions</h4><p id="mgrOpenExceptions">0</p></div></div>
+                </div>
+                <div class="table-card">
+                    <h3>Driver Performance</h3>
+                    <table>
+                        <thead><tr><th>Driver</th><th>Trips</th><th>On-Time</th><th>Rating</th><th>Status</th></tr></thead>
+                        <tbody id="mgrDriverPerformance"></tbody>
+                    </table>
+                </div>
+                <div class="exception-card">
+                    <h3><i class="fa-solid fa-flag"></i> Exception Summary</h3>
+                    <div class="exception-stats" id="mgrExceptionSummary"></div>
+                </div>
+            </div>
+
+            <!-- Exceptions -->
+            <div id="section-mgr-exceptions" class="section">
+                <div class="dashboard-header"><h2>Exception Summary</h2><p>All active exceptions across fleet</p></div>
+                <div class="exception-card"><h3>Exception Breakdown</h3><div class="exception-stats" id="mgrExceptionsBreakdown"></div></div>
+                <div class="table-card">
+                    <table>
+                        <thead><tr><th>Trip</th><th>Type</th><th>Description</th><th>Status</th></tr></thead>
+                        <tbody id="mgrExceptionsList"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Drivers -->
+            <div id="section-mgr-drivers" class="section">
+                <div class="dashboard-header"><h2>Driver Management</h2><p>Performance, availability & reviews</p></div>
+                <div class="table-card">
+                    <table>
+                        <thead><tr><th>Driver</th><th>Status</th><th>Rating</th><th>Trips</th><th>Actions</th></tr></thead>
+                        <tbody id="mgrDriversList"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Analytics -->
+            <div id="section-mgr-analytics" class="section">
+                <div class="dashboard-header"><h2>Analytics & Trends</h2><p>Fleet-wide KPIs</p></div>
+                <div class="stats-grid">
+                    <div class="stat-card"><i class="fa-solid fa-arrow-up"></i><div><h4>On-Time Trend</h4><p>↑ 3%</p></div></div>
+                    <div class="stat-card"><i class="fa-solid fa-arrow-down"></i><div><h4>Exception Trend</h4><p>↓ 2%</p></div></div>
+                    <div class="stat-card"><i class="fa-solid fa-flag"></i><div><h4>Top Route</h4><p>JHB → PTA</p></div></div>
+                </div>
+                <div class="exception-card"><h3>Exception Heatmap</h3><p style="color:#6b7280;">Visual map of exceptions by region (demo placeholder)</p></div>
+            </div>
+
+            <!-- Maintenance -->
+            <div id="section-mgr-maintenance" class="section">
+                <div class="dashboard-header"><h2>Unsolved Reports</h2><p>Maintenance & incident reports</p></div>
+                <div class="table-card">
+                    <table>
+                        <thead><tr><th>Vehicle</th><th>Issue</th><th>Severity</th><th>Days Open</th></tr></thead>
+                        <tbody id="mgrMaintenanceList"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Disputes -->
+            <div id="section-mgr-disputes" class="section">
+                <div class="dashboard-header"><h2>Disputed Deliveries</h2><p>Pending approvals</p></div>
+                <div class="table-card">
+                    <table>
+                        <thead><tr><th>Trip</th><th>Customer</th><th>Reason</th><th>Status</th></tr></thead>
+                        <tbody id="mgrDisputesList"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Manage Users -->
+            <div id="section-mgr-users" class="section">
+                <div class="dashboard-header">
+                    <h2>User Management</h2>
+                    <p>Add or remove users from the company</p>
+                </div>
+                <div class="toolbar">
+                    <button class="btn-primary" id="addUserBtn"><i class="fa-solid fa-plus"></i> Add User</button>
+                </div>
+                <div class="table-card">
+                    <table>
+                        <thead><tr><th>Full Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Actions</th></tr></thead>
+                        <tbody id="approvedUsersTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+   
+    <!-- ─── PROFILE MODAL ─── -->
+    <div class="profile-overlay" id="profileOverlay">
+        <div class="profile-modal">
+            <button class="close-modal" id="closeProfileBtn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="profile-header">
+                <div class="profile-avatar-wrapper">
+                    <img src="https://i.pravatar.cc/80?img=12" alt="Profile" id="profileAvatarImgMgr" />
+                    <div class="profile-avatar-edit" id="profileAvatarEditMgr"><i class="fa-solid fa-camera"></i></div>
+                    <input type="file" id="profileAvatarInputMgr" accept="image/*" style="display:none;" />
+                </div>
+                <h2 id="profileDisplayNameMgr">Jane Smith</h2>
+                <p>Manager</p>
+            </div>
+            <div class="profile-tabs">
+                <button class="active" data-tab="edit-profile">Edit Profile</button>
+                <button data-tab="change-password">Change Password</button>
+            </div>
+            <!-- Edit Profile -->
+            <form id="editProfileFormMgr" class="profile-form active">
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <div class="input-wrap"><i class="fa-regular fa-user"></i><input type="text" id="editFullNameMgr" value="Jane Smith" /></div>
+                </div>
+                <div class="input-group">
+                    <label>Phone Number</label>
+                    <div class="input-wrap"><i class="fa-solid fa-phone"></i><input type="tel" id="editPhoneMgr" value="+27 82 123 4568" /></div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" id="editProfileCancelMgr">Cancel</button>
+                    <button type="submit" class="btn-save">Save Changes</button>
+                </div>
+            </form>
+            <!-- Change Password -->
+            <form id="changePasswordFormMgr" class="profile-form">
+                <div class="input-group">
+                    <label>Current Password</label>
+                    <div class="input-wrap"><i class="fa-solid fa-lock"></i><input type="password" id="currentPasswordMgr" placeholder="Enter current password" /></div>
+                </div>
+                <div class="input-group">
+                    <label>New Password</label>
+                    <div class="input-wrap"><i class="fa-solid fa-lock"></i><input type="password" id="newPasswordMgr" placeholder="Min 8 characters" /></div>
+                </div>
+                <div class="input-group">
+                    <label>Confirm New Password</label>
+                    <div class="input-wrap"><i class="fa-solid fa-check-circle"></i><input type="password" id="confirmNewPasswordMgr" placeholder="Confirm new password" /></div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" id="changePasswordCancelMgr">Cancel</button>
+                    <button type="submit" class="btn-save">Update Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ─── ADD USER MODAL ─── -->
+    <div class="auth-overlay" id="addUserOverlay">
+        <div class="auth-modal" style="max-width:450px;">
+            <button class="close-modal" id="closeAddUserBtn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="auth-logo"><i class="fa-solid fa-user-plus"></i><div><h2>Add User</h2><p>Add to approved users list</p></div></div>
+            <form id="addUserForm">
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <div class="input-wrap"><i class="fa-regular fa-user"></i><input type="text" id="addUserFullName" placeholder="Full name" required /></div>
+                </div>
+                <div class="input-group">
+                    <label>Email</label>
+                    <div class="input-wrap"><i class="fa-regular fa-envelope"></i><input type="email" id="addUserEmail" placeholder="email@company.com" required /></div>
+                </div>
+                <div class="input-group">
+                    <label>Phone</label>
+                    <div class="input-wrap"><i class="fa-solid fa-phone"></i><input type="tel" id="addUserPhone" placeholder="+27 82 123 4567" /></div>
+                </div>
+                <div class="input-group">
+                    <label>Role</label>
+                    <div class="input-wrap">
+                        <i class="fa-solid fa-briefcase"></i>
+                        <select id="addUserRole">
+                            <option value="Driver">Driver</option>
+                            <option value="Dispatcher">Dispatcher</option>
+                            <option value="Manager">Manager</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit">Add User</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="~/js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!localStorage.getItem('token')) {
+                window.location.href = '/Auth/Login';
+                return;
+            }
+
+            if (typeof renderManagerDashboard === 'function') {
+                renderManagerDashboard();
+            }
+
+            const profileOverlay = document.getElementById('profileOverlay');
+            const closeProfileBtn = document.getElementById('closeProfileBtn');
+            const profileMenuItem = document.getElementById('profileMenuItemMgr');
+
+            function openProfileMgr() {
+                if (profileOverlay) {
+                    profileOverlay.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                }
+            }
+
+            function closeProfileMgr() {
+                if (profileOverlay) {
+                    profileOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            }
+
+            if (profileMenuItem) {
+                profileMenuItem.addEventListener('click', function(e) {
+                    document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('open'));
+                    openProfileMgr();
+                });
+            }
+
+            if (closeProfileBtn) {
+                closeProfileBtn.addEventListener('click', closeProfileMgr);
+            }
+
+            if (profileOverlay) {
+                profileOverlay.addEventListener('click', function(e) {
+                    if (e.target === this) closeProfileMgr();
+                });
+            }
+
+            document.querySelectorAll('.profile-tabs button').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.profile-tabs button').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    document.querySelectorAll('.profile-form').forEach(f => f.classList.remove('active'));
+                    const formId = 'form' + this.dataset.tab.replace('-', '');
+                    const form = document.getElementById(formId + 'Mgr') || document.getElementById(formId);
+                    if (form) form.classList.add('active');
+                });
+            });
+
+            const editForm = document.getElementById('editProfileFormMgr');
+            if (editForm) {
+                editForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const name = document.getElementById('editFullNameMgr').value.trim();
+                    const phone = document.getElementById('editPhoneMgr').value.trim();
+                    const displayName = document.getElementById('profileDisplayNameMgr');
+                    if (displayName) displayName.textContent = name;
+                    document.getElementById('dropdownNameMgr').textContent = name;
+                    alert('Profile updated successfully!');
+                    closeProfileMgr();
+                });
+            }
+
+            document.getElementById('editProfileCancelMgr')?.addEventListener('click', closeProfileMgr);
+            document.getElementById('changePasswordCancelMgr')?.addEventListener('click', closeProfileMgr);
+
+            const pwForm = document.getElementById('changePasswordFormMgr');
+            if (pwForm) {
+                pwForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const current = document.getElementById('currentPasswordMgr').value;
+                    const newPw = document.getElementById('newPasswordMgr').value;
+                    const confirm = document.getElementById('confirmNewPasswordMgr').value;
+                    if (!current || !newPw || !confirm) {
+                        alert('Please fill in all fields.');
+                        return;
+                    }
+                    if (newPw !== confirm) {
+                        alert('New passwords do not match.');
+                        return;
+                    }
+                    if (newPw.length < 8) {
+                        alert('Password must be at least 8 characters.');
+                        return;
+                    }
+                    alert('Password changed successfully!');
+                    closeProfileMgr();
+                });
+            }
+
+            const avatarEdit = document.getElementById('profileAvatarEditMgr');
+            const avatarInput = document.getElementById('profileAvatarInputMgr');
+            if (avatarEdit && avatarInput) {
+                avatarEdit.addEventListener('click', function() { avatarInput.click(); });
+                avatarInput.addEventListener('change', function(e) {
+                    const file = this.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(ev) {
+                            document.getElementById('profileAvatarImgMgr').src = ev.target.result;
+                            document.querySelectorAll('.avatar').forEach(a => a.src = ev.target.result);
+                            document.querySelectorAll('.dropdown-header img').forEach(i => i.src = ev.target.result);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            const addUserOverlay = document.getElementById('addUserOverlay');
+            const closeAddUserBtn = document.getElementById('closeAddUserBtn');
+            const addUserBtn = document.getElementById('addUserBtn');
+            const addUserForm = document.getElementById('addUserForm');
+
+            if (addUserBtn) {
+                addUserBtn.addEventListener('click', function() {
+                    if (addUserOverlay) {
+                        addUserOverlay.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+            }
+
+            if (closeAddUserBtn) {
+                closeAddUserBtn.addEventListener('click', function() {
+                    if (addUserOverlay) {
+                        addUserOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+
+            if (addUserOverlay) {
+                addUserOverlay.addEventListener('click', function(e) {
+                    if (e.target === this) {
+                        addUserOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+
+            if (addUserForm) {
+                addUserForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const fullName = document.getElementById('addUserFullName').value.trim();
+                    const email = document.getElementById('addUserEmail').value.trim();
+                    const phone = document.getElementById('addUserPhone').value.trim();
+                    const role = document.getElementById('addUserRole').value;
+                    if (!fullName || !email) {
+                        alert('Please fill in Name and Email.');
+                        return;
+                    }
+                    if (typeof getApprovedUserByEmail === 'function' && getApprovedUserByEmail(email)) {
+                        alert('This user is already in the system.');
+                        return;
+                    }
+                    if (typeof addApprovedUser === 'function') {
+                        addApprovedUser({ fullName, email, phone, role });
+                        addUserOverlay.classList.remove('active');
+                        document.body.style.overflow = '';
+                        addUserForm.reset();
+                        alert('User added successfully!');
+                    } else {
+                        alert('Function addApprovedUser not found. Please check script.js');
+                    }
+                });
+            }
+
+            function logoutMgr() {
+                if (confirm('Are you sure you want to logout?')) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    window.location.href = '/';
+                }
+            }
+
+            document.getElementById('logoutMenuItemMgr')?.addEventListener('click', logoutMgr);
+            document.getElementById('logoutBtn2')?.addEventListener('click', logoutMgr);
+
+            document.querySelectorAll('.sidebar li').forEach(function(item) {
+                item.addEventListener('click', function() {
+                    const parent = this.parentElement;
+                    parent.querySelectorAll('li').forEach(li => li.classList.remove('active'));
+                    this.classList.add('active');
+                    const sectionId = this.dataset.section;
+                    const content = this.closest('.main-layout').querySelector('.dashboard-content');
+                    if (!content) return;
+                    content.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                    const target = content.querySelector('#section-' + sectionId);
+                    if (target) target.classList.add('active');
+                });
+            });
+
+            document.querySelector('.top-icons .fa-bell')?.addEventListener('click', function() {
+                alert('Notifications:\n\n- Trip T1203 is delayed.\n- New maintenance report for Freightliner #8.\n- Driver Michael Nkosi is on break.');
+            });
+
+            document.querySelector('.top-icons .fa-message')?.addEventListener('click', function() {
+                alert('Messaging is available from the Dispatcher dashboard.');
+            });
+        });
+    </script>
+</body>
+</html>

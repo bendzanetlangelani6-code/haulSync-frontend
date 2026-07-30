@@ -1,0 +1,417 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dispatcher Dashboard – HaulSync</title>
+    <link rel="stylesheet" href="~/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+</head>
+<body>
+
+    
+    <header class="topbar">
+        <div class="logo">
+            <i class="fa-solid fa-truck-fast"></i>
+            <div>
+                <h1>HaulSync</h1>
+                <p>Smart Fleet Coordination Platform</p>
+            </div>
+        </div>
+        <div class="top-icons">
+            <i class="fa-solid fa-bell" title="Notifications" id="bellIcon"></i>
+            <i class="fa-solid fa-message" title="Messages" id="msgIcon"></i>
+            <div class="avatar-wrapper">
+                <img src="https://i.pravatar.cc/50?img=11" alt="Profile" class="avatar" id="avatarImg" />
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <div class="dropdown-header">
+                        <img src="https://i.pravatar.cc/50?img=11" alt="Profile" />
+                        <div><strong id="dropdownName">John Williams</strong><span id="dropdownRole">Dispatcher</span></div>
+                    </div>
+                    <ul>
+                        <li id="profileMenuItem"><i class="fa-regular fa-user"></i> My Profile</li>
+                        <li id="logoutMenuItem"><i class="fa-solid fa-right-from-bracket"></i> Logout</li>
+                    </ul>
+                </div>
+            </div>
+            <button class="btn-logout" id="logoutBtn"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <aside class="sidebar">
+            <ul>
+                <li class="active" data-section="dashboard"><i class="fa-solid fa-chart-line"></i> Dashboard</li>
+                <li data-section="trips"><i class="fa-solid fa-road"></i> Trips</li>
+                <li data-section="fleet"><i class="fa-solid fa-truck-fast"></i> Fleet</li>
+                <li data-section="messaging"><i class="fa-solid fa-message"></i> Messaging</li>
+                <li data-section="maintenance"><i class="fa-solid fa-wrench"></i> Maintenance</li>
+                <li data-section="availability"><i class="fa-solid fa-user-check"></i> Availability</li>
+                <li data-section="analytics"><i class="fa-solid fa-chart-pie"></i> Analytics</li>
+            </ul>
+        </aside>
+
+        <section class="dashboard-content">
+            <!-- Dashboard -->
+            <div id="section-dashboard" class="section active">
+                <div class="dashboard-header">
+                    <h2>Fleet Overview</h2>
+                    <p>Real-time fleet monitoring</p>
+                </div>
+                <div class="top-grid">
+                    <div class="map-card"><div id="map"></div></div>
+                    <div class="recent-card">
+                        <h3>Recent Trips</h3>
+                        <div id="recentTripsList"></div>
+                    </div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card"><i class="fa-solid fa-truck"></i><div><h4>Active Trips</h4><p id="statActiveTrips">0</p></div></div>
+                    <div class="stat-card"><i class="fa-solid fa-circle-exclamation red"></i><div><h4>Delayed</h4><p id="statDelayed">0</p></div></div>
+                    <div class="stat-card"><i class="fa-solid fa-car-side"></i><div><h4>Idle Vehicles</h4><p>5</p></div></div>
+                    <div class="stat-card"><i class="fa-solid fa-user-check"></i><div><h4>Available Drivers</h4><p id="statAvailableDrivers">0</p></div></div>
+                </div>
+                <div class="alert-box">
+                    <div class="alert-left"><i class="fa-solid fa-triangle-exclamation"></i><div><h4>Alert</h4><p id="alertMessage">All trips on time.</p></div></div>
+                    <button class="view-details-btn" id="alertDetailsBtn">View Details</button>
+                </div>
+            </div>
+
+            <!-- Trips -->
+            <div id="section-trips" class="section">
+                <div class="dashboard-header"><h2>Trip Management</h2><p>Create, assign, and monitor trips</p></div>
+                <div class="toolbar">
+                    <button class="btn-primary" id="createTripBtn"><i class="fa-solid fa-plus"></i> Create Trip</button>
+                    <button class="btn-primary" id="assignTripBtn"><i class="fa-solid fa-user-plus"></i> Assign Trip</button>
+                </div>
+                <div class="table-card">
+                    <table>
+                        <thead><tr><th>Trip ID</th><th>Pickup</th><th>Delivery</th><th>Status</th><th>Driver</th><th>Actions</th></tr></thead>
+                        <tbody id="tripsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Fleet (static) -->
+            <div id="section-fleet" class="section">
+                <div class="dashboard-header"><h2>Fleet Management</h2><p>Vehicle capacity & status</p></div>
+                <div class="table-card">
+                    <table>
+                        <thead><tr><th>Vehicle</th><th>Type</th><th>Max Weight</th><th>Max Volume</th><th>Current Load</th><th>Available</th><th>Status</th></tr></thead>
+                        <tbody>
+                            <tr><td>Ford Transit #12</td><td>Van</td><td>1200kg</td><td>12m³</td><td>600kg</td><td>600kg</td><td><span class="badge-green">On Route</span></td></tr>
+                            <tr><td>Freightliner #8</td><td>Truck</td><td>5000kg</td><td>40m³</td><td>3500kg</td><td>1500kg</td><td><span class="badge-green">On Route</span></td></tr>
+                            <tr><td>RAM 2500</td><td>Pickup</td><td>800kg</td><td>8m³</td><td>0kg</td><td>800kg</td><td><span class="badge-yellow">Idle</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Messaging -->
+            <div id="section-messaging" class="section">
+                <div class="dashboard-header"><h2>Messaging</h2><p>Send messages to specific drivers</p></div>
+                <div class="toolbar">
+                    <button class="btn-primary" id="sendMsgBtn"><i class="fa-solid fa-pen"></i> New Message</button>
+                </div>
+                <div class="message-list" id="messageList"></div>
+            </div>
+
+            <!-- Maintenance (static) -->
+            <div id="section-maintenance" class="section">
+                <div class="dashboard-header"><h2>Maintenance Reports</h2><p>Track vehicle issues</p></div>
+                <div class="table-card">
+                    <table>
+                        <thead><tr><th>Vehicle</th><th>Issue</th><th>Severity</th><th>Status</th><th>Reported</th></tr></thead>
+                        <tbody>
+                            <tr><td>Freightliner #8</td><td>Brake wear</td><td><span class="badge-yellow">Medium</span></td><td>Pending Review</td><td>2026-07-08</td></tr>
+                            <tr><td>Ford Transit #12</td><td>Tire puncture</td><td><span class="badge-red">High</span></td><td>In Progress</td><td>2026-07-07</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Availability -->
+            <div id="section-availability" class="section">
+                <div class="dashboard-header">
+                    <h2>Driver Availability</h2>
+                    <p>Real-time driver status (updated from mobile app)</p>
+                </div>
+                <div class="toolbar">
+                    <button class="btn-primary" id="simulateAvailabilityBtn">
+                        <i class="fa-solid fa-mobile-screen-button"></i> Simulate Driver Update
+                    </button>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card"><i class="fa-solid fa-circle green"></i><div><h4>Available</h4><p id="availAvailable">0</p></div></div>
+                    <div class="stat-card"><i class="fa-solid fa-circle yellow"></i><div><h4>On Trip / Break</h4><p id="availOnTrip">0</p></div></div>
+                    <div class="stat-card"><i class="fa-solid fa-circle red"></i><div><h4>Off Duty</h4><p id="availOffDuty">0</p></div></div>
+                </div>
+                <div class="table-card">
+                    <table>
+                        <thead><tr><th>Driver</th><th>Status</th><th>Location</th><th>ETA Return</th></tr></thead>
+                        <tbody id="availTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Analytics -->
+            <div id="section-analytics" class="section">
+                <div class="dashboard-header"><h2>Analytics</h2><p>Performance metrics & trends</p></div>
+                <div class="stats-grid">
+                    <div class="stat-card"><i class="fa-solid fa-percent"></i><div><h4>On-Time Delivery</h4><p>94%</p></div></div>
+                    <div class="stat-card"><i class="fa-solid fa-gas-pump"></i><div><h4>Avg Fuel</h4><p>8.2 L/100km</p></div></div>
+                    <div class="stat-card"><i class="fa-solid fa-star"></i><div><h4>Driver Rating</h4><p>4.6 ★</p></div></div>
+                </div>
+                <div class="table-card">
+                    <h3>Driver Performance</h3>
+                    <table>
+                        <thead><tr><th>Driver</th><th>Trips</th><th>On-Time</th><th>Rating</th></tr></thead>
+                        <tbody>
+                            <tr><td>Michael Nkosi</td><td>45</td><td><span class="status-good">98%</span></td><td>4.9 ★</td></tr>
+                            <tr><td>Thabo Dlamini</td><td>38</td><td><span class="status-good">95%</span></td><td>4.7 ★</td></tr>
+                            <tr><td>Lerato Mbeki</td><td>42</td><td><span class="status-warning">82%</span></td><td>3.9 ★</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+   
+    <!-- ─── PROFILE MODAL ─── -->
+    <div class="profile-overlay" id="profileOverlay">
+        <div class="profile-modal">
+            <button class="close-modal" id="closeProfileBtn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="profile-header">
+                <div class="profile-avatar-wrapper">
+                    <img src="https://i.pravatar.cc/80?img=11" alt="Profile" id="profileAvatarImg" />
+                    <div class="profile-avatar-edit" id="profileAvatarEdit"><i class="fa-solid fa-camera"></i></div>
+                    <input type="file" id="profileAvatarInput" accept="image/*" style="display:none;" />
+                </div>
+                <h2 id="profileDisplayName">John Williams</h2>
+                <p>Dispatcher</p>
+            </div>
+            <div class="profile-tabs">
+                <button class="active" data-tab="edit-profile">Edit Profile</button>
+                <button data-tab="change-password">Change Password</button>
+            </div>
+            <!-- Edit Profile -->
+            <form id="editProfileForm" class="profile-form active">
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <div class="input-wrap"><i class="fa-regular fa-user"></i><input type="text" id="editFullName" value="John Williams" /></div>
+                </div>
+                <div class="input-group">
+                    <label>Phone Number</label>
+                    <div class="input-wrap"><i class="fa-solid fa-phone"></i><input type="tel" id="editPhone" value="+27 82 123 4567" /></div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" id="editProfileCancel">Cancel</button>
+                    <button type="submit" class="btn-save">Save Changes</button>
+                </div>
+            </form>
+            <!-- Change Password -->
+            <form id="changePasswordForm" class="profile-form">
+                <div class="input-group">
+                    <label>Current Password</label>
+                    <div class="input-wrap"><i class="fa-solid fa-lock"></i><input type="password" id="currentPassword" placeholder="Enter current password" /></div>
+                </div>
+                <div class="input-group">
+                    <label>New Password</label>
+                    <div class="input-wrap"><i class="fa-solid fa-lock"></i><input type="password" id="newPassword" placeholder="Min 8 characters" /></div>
+                </div>
+                <div class="input-group">
+                    <label>Confirm New Password</label>
+                    <div class="input-wrap"><i class="fa-solid fa-check-circle"></i><input type="password" id="confirmNewPassword" placeholder="Confirm new password" /></div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" id="changePasswordCancel">Cancel</button>
+                    <button type="submit" class="btn-save">Update Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ─── CREATE TRIP MODAL ─── -->
+    <div class="auth-overlay" id="createTripOverlay">
+        <div class="auth-modal" style="max-width:520px;">
+            <button class="close-modal" id="closeCreateTripBtn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="auth-logo"><i class="fa-solid fa-plus-circle"></i><div><h2>Create New Trip</h2><p>Fill in the trip details</p></div></div>
+            <form id="createTripForm">
+                <div class="input-group">
+                    <label>Pickup Location</label>
+                    <div class="input-wrap"><i class="fa-solid fa-location-dot"></i><input type="text" id="tripPickup" placeholder="e.g. JHB Warehouse" required /></div>
+                </div>
+                <div class="input-group">
+                    <label>Delivery Location</label>
+                    <div class="input-wrap"><i class="fa-solid fa-flag"></i><input type="text" id="tripDelivery" placeholder="e.g. PTA Distribution" required /></div>
+                </div>
+                <div class="input-group">
+                    <label>Customer Name</label>
+                    <div class="input-wrap"><i class="fa-regular fa-building"></i><input type="text" id="tripCustomer" placeholder="Customer name" required /></div>
+                </div>
+                <div class="input-group">
+                    <label>Priority</label>
+                    <div class="input-wrap">
+                        <i class="fa-solid fa-gauge-high"></i>
+                        <select id="tripPriority">
+                            <option value="Standard">Standard</option>
+                            <option value="Urgent">Urgent</option>
+                            <option value="Express">Express</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Driver (optional)</label>
+                    <div class="input-wrap"><i class="fa-solid fa-user"></i><input type="text" id="tripDriver" placeholder="Leave empty to assign later" /></div>
+                </div>
+                <button type="submit" class="btn-submit">Create Trip</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ─── VIEW TRIP MODAL ─── -->
+    <div class="auth-overlay" id="viewTripOverlay">
+        <div class="auth-modal" style="max-width:500px;">
+            <button class="close-modal" id="closeViewTripBtn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="auth-logo"><i class="fa-solid fa-eye"></i><div><h2>Trip Details</h2><p id="viewTripId">T1234</p></div></div>
+            <div id="viewTripContent" style="padding:10px 0;line-height:1.8;"></div>
+            <div style="display:flex;gap:10px;margin-top:16px;">
+                <button class="btn-submit" id="editTripFromView" style="flex:1;">Edit Trip</button>
+                <button class="btn-cancel" onclick="document.getElementById('viewTripOverlay').classList.remove('active');document.body.style.overflow='';" style="flex:1;background:#f3f4f6;border:none;border-radius:12px;font-weight:600;cursor:pointer;">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── ASSIGN TRIP MODAL ─── -->
+    <div class="auth-overlay" id="assignTripOverlay">
+        <div class="auth-modal" style="max-width:450px;">
+            <button class="close-modal" id="closeAssignTripBtn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="auth-logo"><i class="fa-solid fa-user-plus"></i><div><h2>Assign Trip</h2><p>Select a trip and a driver</p></div></div>
+            <form id="assignTripForm">
+                <div class="input-group">
+                    <label>Trip</label>
+                    <div class="input-wrap">
+                        <i class="fa-solid fa-road"></i>
+                        <select id="assignTripSelect" required>
+                            <option value="">-- Select a trip --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Driver</label>
+                    <div class="input-wrap">
+                        <i class="fa-solid fa-user"></i>
+                        <select id="assignDriverSelect" required>
+                            <option value="">-- Select a driver --</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit">Assign</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ─── SEND MESSAGE MODAL ─── -->
+    <div class="auth-overlay" id="sendMessageOverlay">
+        <div class="auth-modal" style="max-width:450px;">
+            <button class="close-modal" id="closeSendMessageBtn"><i class="fa-solid fa-xmark"></i></button>
+            <div class="auth-logo"><i class="fa-solid fa-pen"></i><div><h2>Send Message</h2><p>Message a driver</p></div></div>
+            <form id="sendMessageForm">
+                <div class="input-group">
+                    <label>Driver</label>
+                    <div class="input-wrap">
+                        <i class="fa-solid fa-user"></i>
+                        <select id="msgDriverSelect" required>
+                            <option value="">-- Select driver --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Message</label>
+                    <div class="input-wrap" style="align-items:flex-start;">
+                        <i class="fa-regular fa-comment" style="padding-top:12px;"></i>
+                        <textarea id="msgContent" rows="4" placeholder="Type your message..." style="width:100%;padding:10px;border:none;outline:none;font-family:inherit;resize:vertical;"></textarea>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="~/js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!localStorage.getItem('token')) {
+                window.location.href = '/Auth/Login';
+                return;
+            }
+
+            if (typeof renderTrips === 'function') renderTrips();
+            if (typeof renderMessages === 'function') renderMessages();
+            if (typeof renderAvailability === 'function') renderAvailability();
+
+            if (document.getElementById('map') && typeof initMap === 'function') {
+                setTimeout(initMap, 300);
+            }
+
+            function populateDriverSelects() {
+                if (typeof loadAvailability !== 'function') return;
+                const drivers = loadAvailability();
+                const driverNames = drivers.map(d => d.name);
+                const selects = ['assignDriverSelect', 'msgDriverSelect'];
+                selects.forEach(id => {
+                    const sel = document.getElementById(id);
+                    if (!sel) return;
+                    const defaultOption = sel.querySelector('option[value=""]');
+                    sel.innerHTML = '';
+                    if (defaultOption) sel.appendChild(defaultOption);
+                    driverNames.forEach(name => {
+                        const opt = document.createElement('option');
+                        opt.value = name;
+                        opt.textContent = name;
+                        sel.appendChild(opt);
+                    });
+                });
+            }
+
+            populateDriverSelects();
+
+            const origUpdate = window.updateDriverStatus;
+            if (origUpdate) {
+                window.updateDriverStatus = function(name, status, location, eta) {
+                    const result = origUpdate(name, status, location, eta);
+                    setTimeout(populateDriverSelects, 50);
+                    return result;
+                };
+            }
+
+            const simBtn = document.getElementById('simulateAvailabilityBtn');
+            if (simBtn) {
+                simBtn.addEventListener('click', function() {
+                    setTimeout(populateDriverSelects, 200);
+                });
+            }
+
+            const assignBtn = document.getElementById('assignTripBtn');
+            if (assignBtn) {
+                assignBtn.addEventListener('click', function() {
+                    setTimeout(populateDriverSelects, 100);
+                });
+            }
+
+            const sendBtn = document.getElementById('sendMsgBtn');
+            if (sendBtn) {
+                sendBtn.addEventListener('click', function() {
+                    setTimeout(populateDriverSelects, 100);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
